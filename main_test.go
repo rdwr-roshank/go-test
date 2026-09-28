@@ -65,3 +65,32 @@ func BenchmarkGreet(b *testing.B) {
 		Greet("World")
 	}
 }
+
+// TestDivide tests the Divide function including error cases
+func TestDivide(t *testing.T) {
+	tests := []struct {
+		name      string
+		a         int
+		b         int
+		expected  int
+		wantError bool
+	}{
+		{"normal division", 10, 2, 5, false},
+		{"division result", 20, 4, 5, false},
+		{"divide by zero", 10, 0, 0, true},
+		{"negative division", -10, 2, -5, false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := Divide(tt.a, tt.b)
+			if (err != nil) != tt.wantError {
+				t.Errorf("Divide(%d, %d) error = %v, wantError %v", tt.a, tt.b, err, tt.wantError)
+				return
+			}
+			if err == nil && got != tt.expected {
+				t.Errorf("Divide(%d, %d) = %d, want %d", tt.a, tt.b, got, tt.expected)
+			}
+		})
+	}
+}
